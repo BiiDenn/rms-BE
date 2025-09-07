@@ -49,12 +49,6 @@ public class Candidates {
     @Column(name = "referredBy", length = 255)
     private String referredBy;
 
-    @Column(name = "motherLanguage", length = 100)
-    private String motherLanguage;
-
-    @Column(name = "secondLanguage", length = 100)
-    private String secondLanguage;
-
     @Lob
     @Column(name = "note")
     private String note;

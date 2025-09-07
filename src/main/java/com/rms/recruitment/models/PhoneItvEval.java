@@ -3,7 +3,7 @@ package com.rms.recruitment.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -21,38 +21,14 @@ public class PhoneItvEval {
     private Integer phoneEvalId;
 
     @Lob
-    @Column(name = "leaveReason")
-    private String leaveReason;
+    @Column(name = "workingExps")
+    private String workingExps;
 
-    @Lob
-    @Column(name = "objective")
-    private String objective;
+    @Column(name = "minExpectedSalary", precision = 15, scale = 2)
+    private BigDecimal minExpectedSalary;
 
-    @Column(name = "positionApplied", length = 255)
-    private String positionApplied;
-
-    @Column(name = "availableDate")
-    private LocalDate availableDate;
-
-    @Lob
-    @Column(name = "other")
-    private String other;
-
-    @Column(name = "experienceYear")
-    private Integer experienceYear;
-
-    @Column(name = "domain", length = 255)
-    private String domain;
-
-    @Column(name = "technologyUsed", length = 255)
-    private String technologyUsed;
-
-    @Column(name = "supportTools", length = 255)
-    private String supportTools;
-
-    @Lob
-    @Column(name = "note")
-    private String note;
+    @Column(name = "maxExpectedSalary", precision = 15, scale = 2)
+    private BigDecimal maxExpectedSalary;
 
     @Column(name = "employeeId")
     private Integer employeeId;
@@ -60,9 +36,6 @@ public class PhoneItvEval {
     @ManyToOne
     @JoinColumn(name = "employeeId", referencedColumnName = "employeeId", insertable = false, updatable = false)
     private Employees employee;
-
-    @OneToMany(mappedBy = "phoneItvEval")
-    private List<PhoneItvEvalDetail> phoneItvEvalDetails;
 
     @OneToMany(mappedBy = "phoneItvEval")
     private List<CandidateProcess> candidateProcesses;

@@ -59,14 +59,14 @@ public class Recruitments {
     @Column(name = "employeeId")
     private Integer employeeId;
 
-     @ManyToOne
-     @JoinColumn(name = "divisionId", referencedColumnName = "divisionId", insertable = false, updatable = false)
-     private Divisions division;
+    @ManyToOne
+    @JoinColumn(name = "divisionId", referencedColumnName = "divisionId", insertable = false, updatable = false)
+    private Divisions division;
 
-     @ManyToOne
-     @JoinColumn(name = "employeeId", referencedColumnName = "employeeId", insertable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "employeeId", referencedColumnName = "employeeId", insertable = false, updatable = false)
 
-     private Employees employee;
-     @OneToMany(mappedBy = "recruitment")
-     private List<RecruitmentHistory> recruitmentHistories;
+    private Employees employee;
+    @OneToMany(mappedBy = "recruitment")
+    private List<RecruitmentHistory> recruitmentHistories;
 }
