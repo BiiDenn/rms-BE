@@ -5,8 +5,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -24,6 +22,142 @@ public class Candidates {
 
     @Column(name = "lastName", length = 100)
     private String lastName;
+
+    public Integer getCandId() {
+        return candId;
+    }
+
+    public void setCandId(Integer candId) {
+        this.candId = candId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getMainPhone() {
+        return mainPhone;
+    }
+
+    public void setMainPhone(String mainPhone) {
+        this.mainPhone = mainPhone;
+    }
+
+    public String getSubPhone() {
+        return subPhone;
+    }
+
+    public void setSubPhone(String subPhone) {
+        this.subPhone = subPhone;
+    }
+
+    public String getMainEmail() {
+        return mainEmail;
+    }
+
+    public void setMainEmail(String mainEmail) {
+        this.mainEmail = mainEmail;
+    }
+
+    public String getSubEmail() {
+        return subEmail;
+    }
+
+    public void setSubEmail(String subEmail) {
+        this.subEmail = subEmail;
+    }
+
+    public String getReferredBy() {
+        return referredBy;
+    }
+
+    public void setReferredBy(String referredBy) {
+        this.referredBy = referredBy;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Integer getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public Integer getJobTitleId() {
+        return jobTitleId;
+    }
+
+    public void setJobTitleId(Integer jobTitleId) {
+        this.jobTitleId = jobTitleId;
+    }
+
+    public MasterData getGenderMasterData() {
+        return genderMasterData;
+    }
+
+    public void setGenderMasterData(MasterData genderMasterData) {
+        this.genderMasterData = genderMasterData;
+    }
+
+    public Employees getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employees employee) {
+        this.employee = employee;
+    }
+
+    public JobTitles getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(JobTitles jobTitle) {
+        this.jobTitle = jobTitle;
+    }
 
     @Column(name = "gender")
     private Integer gender;

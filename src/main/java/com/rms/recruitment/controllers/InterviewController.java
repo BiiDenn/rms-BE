@@ -8,6 +8,8 @@ import com.rms.recruitment.repositories.InterviewEvaluationRepository;
 import com.rms.recruitment.repositories.RecruitmentProcessRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +34,30 @@ public class InterviewController {
 
     @Autowired
     private RecruitmentProcessRepository recruitmentProcessRepository;
+
+    public CandidatesRepository getCandidatesRepository() {
+        return candidatesRepository;
+    }
+
+    public void setCandidatesRepository(CandidatesRepository candidatesRepository) {
+        this.candidatesRepository = candidatesRepository;
+    }
+
+    public InterviewEvaluationRepository getInterviewEvaluationRepository() {
+        return interviewEvaluationRepository;
+    }
+
+    public void setInterviewEvaluationRepository(InterviewEvaluationRepository interviewEvaluationRepository) {
+        this.interviewEvaluationRepository = interviewEvaluationRepository;
+    }
+
+    public RecruitmentProcessRepository getRecruitmentProcessRepository() {
+        return recruitmentProcessRepository;
+    }
+
+    public void setRecruitmentProcessRepository(RecruitmentProcessRepository recruitmentProcessRepository) {
+        this.recruitmentProcessRepository = recruitmentProcessRepository;
+    }
 
     @GetMapping("/schedule")
     @Operation(summary = "Get interview schedule", description = "Get list of scheduled interviews")
