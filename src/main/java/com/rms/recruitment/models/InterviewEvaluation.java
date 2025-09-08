@@ -42,4 +42,68 @@ public class InterviewEvaluation {
 
     @OneToMany(mappedBy = "interviewEvaluation")
     private List<InterviewDetails> interviewDetails;
+
+    public Integer getItvEvalId() {
+        return itvEvalId;
+    }
+
+    public void setItvEvalId(Integer itvEvalId) {
+        this.itvEvalId = itvEvalId;
+    }
+
+    public String getCandLevel() {
+        return candLevel;
+    }
+
+    public void setCandLevel(String candLevel) {
+        this.candLevel = candLevel;
+    }
+
+    public String getHrComment() {
+        return hrComment;
+    }
+
+    public void setHrComment(String hrComment) {
+        this.hrComment = hrComment;
+    }
+
+    public String getRecommendationResult() {
+        return recommendationResult;
+    }
+
+    public void setRecommendationResult(String recommendationResult) {
+        this.recommendationResult = recommendationResult;
+    }
+
+    public String getRecommendationNote() {
+        return recommendationNote;
+    }
+
+    public void setRecommendationNote(String recommendationNote) {
+        this.recommendationNote = recommendationNote;
+    }
+
+    public Integer getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public Employees getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employees employee) {
+        this.employee = employee;
+    }
+
+    public List<InterviewDetails> getInterviewDetails() {
+        return interviewDetails;
+    }
+
+    public void setInterviewDetails(List<InterviewDetails> interviewDetails) {
+        this.interviewDetails = interviewDetails;
+    }
 }

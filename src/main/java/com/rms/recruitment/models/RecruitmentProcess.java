@@ -14,6 +14,53 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "recruitment_process")
 public class RecruitmentProcess {
+    public Integer getRecruitProcessId() {
+        return recruitProcessId;
+    }
+
+    public void setRecruitProcessId(Integer recruitProcessId) {
+        this.recruitProcessId = recruitProcessId;
+    }
+
+    public String getRecruitProcessStatus() {
+        return recruitProcessStatus;
+    }
+
+    public void setRecruitProcessStatus(String recruitProcessStatus) {
+        this.recruitProcessStatus = recruitProcessStatus;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Integer getRecruitId() {
+        return recruitId;
+    }
+
+    public void setRecruitId(Integer recruitId) {
+        this.recruitId = recruitId;
+    }
+
+    public Recruitments getRecruitment() {
+        return recruitment;
+    }
+
+    public void setRecruitment(Recruitments recruitment) {
+        this.recruitment = recruitment;
+    }
+
+    public List<CandidateProcess> getCandidateProcesses() {
+        return candidateProcesses;
+    }
+
+    public void setCandidateProcesses(List<CandidateProcess> candidateProcesses) {
+        this.candidateProcesses = candidateProcesses;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

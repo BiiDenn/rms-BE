@@ -22,9 +22,9 @@ public class PhoneItvEval {
     private Integer phoneEvalId;
 
     @Lob
-    @Column(name = "leaveReason")
-    private String leaveReason;
-
+    @Column(name = "workingExps")
+    private String workingExps;
+  
     @Lob
     @Column(name = "objective")
     private String objective;
@@ -57,9 +57,6 @@ public class PhoneItvEval {
     @ManyToOne
     @JoinColumn(name = "employeeId", referencedColumnName = "employeeId", insertable = false, updatable = false)
     private Employees employee;
-
-    @OneToMany(mappedBy = "phoneItvEval")
-    private List<PhoneItvEvalDetail> phoneItvEvalDetails;
 
     @OneToMany(mappedBy = "phoneItvEval")
     private List<CandidateProcess> candidateProcesses;
