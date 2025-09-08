@@ -48,7 +48,7 @@ public class CandidateProcess {
     private Integer recruitProcessId;
 
     @ManyToOne
-    @JoinColumn(name = "candProcessTypeId", referencedColumnName = "MasterDataID", insertable = false, updatable = false)
+    @JoinColumn(name = "candProcessTypeId", referencedColumnName = "MasterDataID", insertable = false, updatable = false, foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private MasterData candProcessType;
 
     @ManyToOne
@@ -70,4 +70,28 @@ public class CandidateProcess {
     @ManyToOne
     @JoinColumn(name = "recruitProcessId", referencedColumnName = "recruitProcessId", insertable = false, updatable = false)
     private RecruitmentProcess recruitmentProcess;
+
+    @Column(name = "url", length = 512)
+    private String url;
+
+    @Column(name = "password", length = 255)
+    private String password;
+
+    // Store the name of the candidate process type alongside the FK
+    @Column(name = "candidateProcessType", length = 255)
+    private String candidateProcessType;
+
+    @Column(name = "interviewerId")
+    private Integer interviewerId;
+
+    @ManyToOne
+    @JoinColumn(name = "interviewerId", referencedColumnName = "employeeId", insertable = false, updatable = false)
+    private Employees interviewer;
+
+    @Column(name = "interviewerEmail", length = 255)
+    private String interviewerEmail;
+
+    @Lob
+    @Column(name = "note")
+    private String note;
 }

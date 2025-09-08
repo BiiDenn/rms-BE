@@ -3,6 +3,7 @@ package com.rms.recruitment.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -23,12 +24,32 @@ public class PhoneItvEval {
     @Lob
     @Column(name = "workingExps")
     private String workingExps;
+  
+    @Lob
+    @Column(name = "objective")
+    private String objective;
 
-    @Column(name = "minExpectedSalary", precision = 15, scale = 2)
+    @Column(name = "positionApplied", length = 255)
+    private String positionApplied;
+
+    @Column(name = "availableDate")
+    private LocalDate availableDate;
+
+    @Lob
+    @Column(name = "other")
+    private String other;
+
+    // Moved experience fields to a dedicated table PhoneItvExperience
+
+    @Column(name = "max_expected_salary", precision = 15, scale = 2)
+    private BigDecimal maxExpectedSalary;
+
+    @Column(name = "min_expected_salary", precision = 15, scale = 2)
     private BigDecimal minExpectedSalary;
 
-    @Column(name = "maxExpectedSalary", precision = 15, scale = 2)
-    private BigDecimal maxExpectedSalary;
+    @Lob
+    @Column(name = "note")
+    private String note;
 
     @Column(name = "employeeId")
     private Integer employeeId;
@@ -39,4 +60,7 @@ public class PhoneItvEval {
 
     @OneToMany(mappedBy = "phoneItvEval")
     private List<CandidateProcess> candidateProcesses;
+
+    @OneToMany(mappedBy = "phoneItvEval")
+    private List<PhoneItvExperience> experiences;
 }
