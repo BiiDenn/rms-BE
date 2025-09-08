@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -38,17 +39,13 @@ public class PhoneItvEval {
     @Column(name = "other")
     private String other;
 
-    @Column(name = "experienceYear")
-    private Integer experienceYear;
+    // Moved experience fields to a dedicated table PhoneItvExperience
 
-    @Column(name = "domain", length = 255)
-    private String domain;
+    @Column(name = "max_expected_salary", precision = 15, scale = 2)
+    private BigDecimal maxExpectedSalary;
 
-    @Column(name = "technologyUsed", length = 255)
-    private String technologyUsed;
-
-    @Column(name = "supportTools", length = 255)
-    private String supportTools;
+    @Column(name = "min_expected_salary", precision = 15, scale = 2)
+    private BigDecimal minExpectedSalary;
 
     @Lob
     @Column(name = "note")
@@ -66,4 +63,7 @@ public class PhoneItvEval {
 
     @OneToMany(mappedBy = "phoneItvEval")
     private List<CandidateProcess> candidateProcesses;
+
+    @OneToMany(mappedBy = "phoneItvEval")
+    private List<PhoneItvExperience> experiences;
 }
