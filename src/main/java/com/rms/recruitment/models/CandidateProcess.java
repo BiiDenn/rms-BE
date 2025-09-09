@@ -22,50 +22,50 @@ public class CandidateProcess {
     @Column(name = "processDate")
     private LocalDate processDate;
 
-    @Column(name = "result", length = 100)
+    @Column(name = "status", length = 100)
     private String status;
 
     @Lob
     @Column(name = "description")
     private String description;
 
-    @Column(name = "candProcessTypeId")
-    private Integer candProcessTypeId;
-
     @Column(name = "candId")
     private Integer candId;
 
+    @Column(name = "candProcessName", length = 255)
+    private String candProcessName;
+
+    // Link to screening record
+    @Column(name = "screeningId")
+    private Integer screeningId;
+
+    @ManyToOne
+    @JoinColumn(name = "screeningId", referencedColumnName = "screeningId", insertable = false, updatable = false)
+    private Screening screening;
+
     @Column(name = "locationId")
     private Integer locationId;
-
-    @Column(name = "phoneEvalId")
-    private Integer phoneEvalId;
-
-    @Column(name = "offerId")
-    private Integer offerId;
-
-    @Column(name = "recruitProcessId")
-    private Integer recruitProcessId;
-
-    @ManyToOne
-    @JoinColumn(name = "candProcessTypeId", referencedColumnName = "MasterDataID", insertable = false, updatable = false, foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
-    private MasterData candProcessType;
-
-    @ManyToOne
-    @JoinColumn(name = "candId", referencedColumnName = "candId", insertable = false, updatable = false)
-    private Candidates candidate;
 
     @ManyToOne
     @JoinColumn(name = "locationId", referencedColumnName = "locationId", insertable = false, updatable = false)
     private Locations location;
 
+    @Column(name = "phoneEvalId")
+    private Integer phoneEvalId;
+
     @ManyToOne
     @JoinColumn(name = "phoneEvalId", referencedColumnName = "phoneEvalId", insertable = false, updatable = false)
     private PhoneItvEval phoneItvEval;
 
+    @Column(name = "offerId")
+    private Integer offerId;
+
     @ManyToOne
     @JoinColumn(name = "offerId", referencedColumnName = "offerId", insertable = false, updatable = false)
     private Offers offer;
+
+    @Column(name = "recruitProcessId")
+    private Integer recruitProcessId;
 
     @ManyToOne
     @JoinColumn(name = "recruitProcessId", referencedColumnName = "recruitProcessId", insertable = false, updatable = false)
@@ -77,19 +77,12 @@ public class CandidateProcess {
     @Column(name = "password", length = 255)
     private String password;
 
-    // Store the name of the candidate process type alongside the FK
-    @Column(name = "candidateProcessType", length = 255)
-    private String candidateProcessType;
-
     @Column(name = "interviewerId")
     private Integer interviewerId;
 
     @ManyToOne
     @JoinColumn(name = "interviewerId", referencedColumnName = "employeeId", insertable = false, updatable = false)
     private Employees interviewer;
-
-    @Column(name = "interviewerEmail", length = 255)
-    private String interviewerEmail;
 
     @Lob
     @Column(name = "note")

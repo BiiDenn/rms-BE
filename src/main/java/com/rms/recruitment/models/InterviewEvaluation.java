@@ -43,6 +43,13 @@ public class InterviewEvaluation {
     @OneToMany(mappedBy = "interviewEvaluation")
     private List<InterviewDetails> interviewDetails;
 
+    @Column(name = "attachment_id")
+    private Integer attachmentId;
+
+    @ManyToOne
+    @JoinColumn(name = "attachment_id", referencedColumnName = "AttachmentID", insertable = false, updatable = false)
+    private Attachments attachment;
+
     public Integer getItvEvalId() {
         return itvEvalId;
     }

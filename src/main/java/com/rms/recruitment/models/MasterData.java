@@ -41,9 +41,6 @@ public class MasterData {
     @OneToMany(mappedBy = "genderMasterData")
     private List<Candidates> candidatesByGender;
 
-    @OneToMany(mappedBy = "candProcessType")
-    private List<CandidateProcess> candidateProcesses;
-
     @OneToMany(mappedBy = "fileTypeMasterData")
     private List<Attachments> attachmentsByFileType;
 
