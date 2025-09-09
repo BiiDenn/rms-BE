@@ -159,6 +159,22 @@ public class Candidates {
         this.jobTitle = jobTitle;
     }
 
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public LocalDate getExpectedOnboardDate() {
+        return expectedOnboardDate;
+    }
+
+    public void setExpectedOnboardDate(LocalDate expectedOnboardDate) {
+        this.expectedOnboardDate = expectedOnboardDate;
+    }
+
     @Column(name = "gender")
     private Integer gender;
 
@@ -204,4 +220,10 @@ public class Candidates {
     @ManyToOne
     @JoinColumn(name = "jobTitleId", referencedColumnName = "jobTitleId", insertable = false, updatable = false)
     private JobTitles jobTitle;
+
+    @Column(name = "maritalStatus", length = 50)
+    private String maritalStatus;
+
+    @Column(name = "expectedOnboardDate")
+    private LocalDate expectedOnboardDate;
 }

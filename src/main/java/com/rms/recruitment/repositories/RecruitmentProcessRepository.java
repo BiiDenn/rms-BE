@@ -33,4 +33,10 @@ public interface RecruitmentProcessRepository extends JpaRepository<RecruitmentP
            "LEFT JOIN FETCH r.division d " +
            "WHERE rp.recruitId = :recruitId")
     List<RecruitmentProcess> findByRecruitIdWithRelations(@Param("recruitId") Integer recruitId);
+
+    @Query("SELECT rp FROM RecruitmentProcess rp " +
+           "LEFT JOIN FETCH rp.recruitment r " +
+           "LEFT JOIN FETCH r.division d " +
+           "WHERE rp.recruitProcessId = :recruitProcessId")
+    Optional<RecruitmentProcess> fetchRecruitmentInfoByProcessId(@Param("recruitProcessId") Integer recruitProcessId);
 }
