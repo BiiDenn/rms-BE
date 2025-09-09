@@ -27,6 +27,9 @@ public class Recruitments {
     @Column(name = "title", length = 255)
     private String title;
 
+    @Column(name = "recruitment_code", length = 255)
+    private String recruitmentCode;
+
     @Column(name = "deadline")
     private LocalDate deadline;
 
