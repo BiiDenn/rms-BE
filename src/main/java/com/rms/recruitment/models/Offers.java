@@ -45,6 +45,14 @@ public class Offers {
     @Column(name = "totalProbationaryIncome", precision = 15, scale = 2)
     private BigDecimal totalProbationaryIncome;
 
+    // Link to job title for which this offer is made
+    @Column(name = "jobTitleId")
+    private Integer jobTitleId;
+
+    @ManyToOne
+    @JoinColumn(name = "jobTitleId", referencedColumnName = "jobTitleId", insertable = false, updatable = false)
+    private JobTitles jobTitle;
+
     @OneToMany(mappedBy = "offer")
     private List<CandidateProcess> candidateProcesses;
 }

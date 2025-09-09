@@ -40,6 +40,9 @@ public class JobTitles {
     @OneToMany(mappedBy = "jobTitle")
     private List<Candidates> candidates;
 
+    @OneToMany(mappedBy = "jobTitle")
+    private List<Offers> offers;
+
     public Integer getJobTitleId() {
         return jobTitleId;
     }

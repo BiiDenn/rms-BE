@@ -21,6 +21,9 @@ public class Recruitments {
     @Column(name = "recruitId")
     private Integer recruitId;
 
+    @Column(name = "recruitment_code", length = 255)
+    private String recruitmentCode;
+
     @Column(name = "title", length = 255)
     private String title;
 
@@ -76,6 +79,14 @@ public class Recruitments {
 
     public void setRecruitId(Integer recruitId) {
         this.recruitId = recruitId;
+    }
+
+    public String getRecruitmentCode() {
+        return recruitmentCode;
+    }
+
+    public void setRecruitmentCode(String recruitmentCode) {
+        this.recruitmentCode = recruitmentCode;
     }
 
     public String getTitle() {
