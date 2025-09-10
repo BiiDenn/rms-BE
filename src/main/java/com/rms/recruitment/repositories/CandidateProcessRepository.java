@@ -1,0 +1,24 @@
+package com.rms.recruitment.repositories;
+
+import com.rms.recruitment.models.CandidateProcess;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface CandidateProcessRepository extends JpaRepository<CandidateProcess, Integer> {
+
+    // Lấy tất cả process của một candidate, sắp xếp theo ngày mới nhất
+    List<CandidateProcess> findByCandIdOrderByProcessDateDesc(Integer candId);
+
+    // Lấy process mới nhất của một candidate
+    @Query("SELECT cp FROM CandidateProcess cp WHERE cp.candId = :candId ORDER BY cp.processDate DESC LIMIT 1")
+    Optional<CandidateProcess> findLatestByCandId(@Param("candId") Integer candId);
+
+    // Lấy process theo tên process
+    List<CandidateProcess> findByCandIdAndCandProcessNameOrderByProcessDateDesc(Integer candId, String processName);
+}

@@ -44,12 +44,12 @@ public class CandidateController {
     @GetMapping
     @Operation(summary = "Lấy danh sách ứng viên", description = "Lấy danh sách ứng viên với phân trang")
     @PreAuthorize("hasAuthority('MANAGE_CANDIDATES')")
-    public ResponseEntity<ApiResponse<Page<CandidateDTO>>> getAllCandidates(
+    public ResponseEntity<ApiResponse<Page<CandidateListDTO>>> getAllCandidates(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "candidateId,desc") String sort) {
         try {
-            Page<CandidateDTO> candidates = candidateService.getAllCandidates(page, size, sort);
+            Page<CandidateListDTO> candidates = candidateService.getAllCandidates(page, size, sort);
             return ResponseEntity.ok(ApiResponse.success(candidates, "Lấy danh sách ứng viên thành công"));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
