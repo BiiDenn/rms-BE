@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Builder
@@ -136,14 +135,6 @@ public class Candidates {
         this.jobTitleId = jobTitleId;
     }
 
-    public MasterData getGenderMasterData() {
-        return genderMasterData;
-    }
-
-    public void setGenderMasterData(MasterData genderMasterData) {
-        this.genderMasterData = genderMasterData;
-    }
-
     public Employees getEmployee() {
         return employee;
     }
@@ -158,22 +149,6 @@ public class Candidates {
 
     public void setJobTitle(JobTitles jobTitle) {
         this.jobTitle = jobTitle;
-    }
-
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public LocalDate getExpectedOnboardDate() {
-        return expectedOnboardDate;
-    }
-
-    public void setExpectedOnboardDate(LocalDate expectedOnboardDate) {
-        this.expectedOnboardDate = expectedOnboardDate;
     }
 
     @Column(name = "gender")
@@ -200,6 +175,21 @@ public class Candidates {
     @Column(name = "referredBy", length = 255)
     private String referredBy;
 
+    @Column(name = "primaryLanguage", length = 100)
+    private String primaryLanguage;
+
+    @Column(name = "secondaryLanguage", length = 100)
+    private String secondaryLanguage;
+
+    @Column(name = "recruitmentSource", length = 255)
+    private String recruitmentSource;
+
+    @Column(name = "maritalStatus", length = 50)
+    private String maritalStatus;
+
+    @Column(name = "expectedOnboardDate")
+    private LocalDate expectedOnboardDate;
+
     @Lob
     @Column(name = "note")
     private String note;
@@ -211,10 +201,6 @@ public class Candidates {
     private Integer jobTitleId;
 
     @ManyToOne
-    @JoinColumn(name = "gender", referencedColumnName = "MasterDataID", insertable = false, updatable = false)
-    private MasterData genderMasterData;
-
-    @ManyToOne
     @JoinColumn(name = "employeeId", referencedColumnName = "employeeId", insertable = false, updatable = false)
     private Employees employee;
 
@@ -222,21 +208,43 @@ public class Candidates {
     @JoinColumn(name = "jobTitleId", referencedColumnName = "jobTitleId", insertable = false, updatable = false)
     private JobTitles jobTitle;
 
-    @Column(name = "maritalStatus", length = 50)
-    private String maritalStatus;
-
-    @Column(name = "expectedOnboardDate")
-    private LocalDate expectedOnboardDate;
-
-    // One-to-Many relationship with CandidateProcess
-    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<CandidateProcess> candidateProcesses;
-
-    public List<CandidateProcess> getCandidateProcesses() {
-        return candidateProcesses;
+    public String getPrimaryLanguage() {
+        return primaryLanguage;
     }
 
-    public void setCandidateProcesses(List<CandidateProcess> candidateProcesses) {
-        this.candidateProcesses = candidateProcesses;
+    public void setPrimaryLanguage(String primaryLanguage) {
+        this.primaryLanguage = primaryLanguage;
+    }
+
+    public String getSecondaryLanguage() {
+        return secondaryLanguage;
+    }
+
+    public void setSecondaryLanguage(String secondaryLanguage) {
+        this.secondaryLanguage = secondaryLanguage;
+    }
+
+    public String getRecruitmentSource() {
+        return recruitmentSource;
+    }
+
+    public void setRecruitmentSource(String recruitmentSource) {
+        this.recruitmentSource = recruitmentSource;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+    public LocalDate getExpectedOnboardDate() {
+        return expectedOnboardDate;
+    }
+
+    public void setExpectedOnboardDate(LocalDate expectedOnboardDate) {
+        this.expectedOnboardDate = expectedOnboardDate;
     }
 }

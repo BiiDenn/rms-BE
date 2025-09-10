@@ -75,7 +75,7 @@ public class CandidateServiceImpl implements CandidateService {
         candidate.setDateOfBirth(createRequest.getDateOfBirth());
 
         if (createRequest.getGender() != null) {
-            candidate.setGender(createRequest.getGender().equals("Nam") ? 1 : 0);
+            candidate.setGender(parseGender(createRequest.getGender()));
         }
 
         candidate.setMainEmail(createRequest.getMainEmail());
@@ -83,7 +83,11 @@ public class CandidateServiceImpl implements CandidateService {
         candidate.setMainPhone(createRequest.getMainPhone());
         candidate.setSubPhone(createRequest.getSubPhone());
         candidate.setNationality(createRequest.getNationality());
+        candidate.setPrimaryLanguage(createRequest.getPrimaryLanguage());
+        candidate.setSecondaryLanguage(createRequest.getSecondaryLanguage());
+        candidate.setRecruitmentSource(createRequest.getRecruitmentSource());
         candidate.setReferredBy(createRequest.getReferrer());
+        candidate.setMaritalStatus(createRequest.getMaritalStatus());
         candidate.setNote(createRequest.getQualifications());
         candidate.setJobTitleId(createRequest.getRecruitmentId());
 
@@ -114,7 +118,7 @@ public class CandidateServiceImpl implements CandidateService {
             candidate.setDateOfBirth(updateRequest.getDateOfBirth());
 
             if (updateRequest.getGender() != null) {
-                candidate.setGender(updateRequest.getGender().equals("Nam") ? 1 : 0);
+                candidate.setGender(parseGender(updateRequest.getGender()));
             }
 
             candidate.setMainEmail(updateRequest.getMainEmail());
@@ -122,7 +126,11 @@ public class CandidateServiceImpl implements CandidateService {
             candidate.setMainPhone(updateRequest.getMainPhone());
             candidate.setSubPhone(updateRequest.getSubPhone());
             candidate.setNationality(updateRequest.getNationality());
+            candidate.setPrimaryLanguage(updateRequest.getPrimaryLanguage());
+            candidate.setSecondaryLanguage(updateRequest.getSecondaryLanguage());
+            candidate.setRecruitmentSource(updateRequest.getRecruitmentSource());
             candidate.setReferredBy(updateRequest.getReferrer());
+            candidate.setMaritalStatus(updateRequest.getMaritalStatus());
             candidate.setNote(updateRequest.getQualifications());
 
             Candidates updatedCandidate = candidatesRepository.save(candidate);
@@ -156,19 +164,12 @@ public class CandidateServiceImpl implements CandidateService {
                 .mainPhone(candidate.getMainPhone())
                 .subPhone(candidate.getSubPhone())
 
-                // hard code
-                .primaryLanguage("Tiếng Việt")
-                .secondaryLanguage("Tiếng Anh")
+                .primaryLanguage(candidate.getPrimaryLanguage())
+                .secondaryLanguage(candidate.getSecondaryLanguage())
                 .recruitmentSource(getRecruitmentSource(candidate))
                 .referrer(candidate.getReferredBy())
-                .maritalStatus("Độc thân")
-                .address("Chưa cập nhật")
+                .maritalStatus(candidate.getMaritalStatus())
                 .qualifications(candidate.getNote())
-                .hardSkills(Arrays.asList("Chưa cập nhật"))
-                .softSkills(Arrays.asList("Chưa cập nhật"))
-                .resumes(new ArrayList<>())
-                .lastUpdatedBy("System")
-                .lastUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy")))
                 .recruitmentId(candidate.getJobTitleId())
                 .recruitmentCode(getRecruitmentCode(candidate))
                 .build();
@@ -193,7 +194,7 @@ public class CandidateServiceImpl implements CandidateService {
             return candidate.getReferredBy();
         }
 
-        return "Chưa xác định";
+        return null;
     }
 
     private String getRecruitmentCode(Candidates candidate) {
@@ -202,12 +203,8 @@ public class CandidateServiceImpl implements CandidateService {
             return candidate.getJobTitle().getRecruitment().getRecruitmentCode();
         }
 
-        // Nếu không có recruitment, tạo từ jobTitle
-        if (candidate.getJobTitle() != null) {
-            return candidate.getJobTitle().getPosition() + "_" + candidate.getJobTitle().getLevel();
-        }
-
-        return "Chưa xác định";
+        // Không tự sinh nếu không có liên kết dữ liệu thật
+        return null;
     }
 
     public CandidatesRepository getCandidatesRepository() {
@@ -226,7 +223,7 @@ public class CandidateServiceImpl implements CandidateService {
             return latestProcess.get().getCandProcessName();
         }
 
-        return "Chưa có tiến độ"; // Mặc định nếu chưa có process
+        return null;
     }
 
     private String getStatus(Candidates candidate) {
@@ -237,20 +234,32 @@ public class CandidateServiceImpl implements CandidateService {
             return latestProcess.get().getStatus();
         }
 
-        return "Chưa có trạng thái"; // Mặc định nếu chưa có process
+        return null;
     }
 
     private String getGenderName(Candidates candidate) {
-        // Lấy từ MasterData thông qua genderMasterData
-        if (candidate.getGenderMasterData() != null) {
-            return candidate.getGenderMasterData().getName();
-        }
-
-        // Fallback nếu không có MasterData
+        // Lấy từ trường gender trực tiếp
         if (candidate.getGender() != null) {
-            return candidate.getGender() == 1 ? "Nam" : "Nữ";
+            return candidate.getGender() == 1 ? "Nam" : candidate.getGender() == 0 ? "Nữ" : null;
         }
 
-        return "Chưa xác định";
+        return null;
+
+    }
+
+    private Integer parseGender(String genderInput) {
+        String normalized = genderInput.trim().toLowerCase();
+        if (normalized.equals("1") || normalized.equals("nam") || normalized.equals("male") || normalized.equals("m")) {
+            return 1;
+        }
+        if (normalized.equals("0") || normalized.equals("nữ") || normalized.equals("nu") || normalized.equals("female")
+                || normalized.equals("f")) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(normalized);
+        } catch (NumberFormatException ignored) {
+        }
+        return null;
     }
 }

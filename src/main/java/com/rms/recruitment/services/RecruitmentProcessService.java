@@ -9,9 +9,11 @@ import java.util.List;
 
 public interface RecruitmentProcessService {
     List<RecruitmentProcessResponse> getRecruitmentProcessesByCandidateId(Integer candidateId);
+
     RecruitmentProcessResponse createRecruitmentProcess(Integer candidateId, CreateRecruitmentProcessRequest request);
 
-    List<CandidateProcessTimelineItemResponse> getCandidateProcessTimeline(Integer candidateId, Integer recruitProcessId);
+    List<CandidateProcessTimelineItemResponse> getCandidateProcessTimeline(Integer candidateId,
+            Integer recruitProcessId);
 
     InterviewOverviewResponse getInterviewOverview(Integer candidateId, Integer recruitProcessId);
 }

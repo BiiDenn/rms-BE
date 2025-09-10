@@ -86,6 +86,41 @@ public class CandidateProcess {
     @Column(name = "note")
     private String note;
 
+    // Default constructor
+    public CandidateProcess() {
+    }
+
+    // Constructor with all fields
+    public CandidateProcess(Integer candProcessId, LocalDate processDate, String status, String description,
+            Integer candId, Candidates candidate, String candProcessName, Integer screeningId, Screening screening,
+            Integer locationId, Locations location, Integer phoneEvalId, List<PhoneItvEval> phoneItvEvals,
+            Integer offerId, Offers offer, Integer recruitProcessId, RecruitmentProcess recruitmentProcess,
+            String url, String password, Integer interviewerId, Employees interviewer, String note) {
+        this.candProcessId = candProcessId;
+        this.processDate = processDate;
+        this.status = status;
+        this.description = description;
+        this.candId = candId;
+        this.candidate = candidate;
+        this.candProcessName = candProcessName;
+        this.screeningId = screeningId;
+        this.screening = screening;
+        this.locationId = locationId;
+        this.location = location;
+        this.phoneEvalId = phoneEvalId;
+        this.phoneItvEvals = phoneItvEvals;
+        this.offerId = offerId;
+        this.offer = offer;
+        this.recruitProcessId = recruitProcessId;
+        this.recruitmentProcess = recruitmentProcess;
+        this.url = url;
+        this.password = password;
+        this.interviewerId = interviewerId;
+        this.interviewer = interviewer;
+        this.note = note;
+    }
+
+    // Getters and Setters
     public Integer getCandProcessId() {
         return candProcessId;
     }
@@ -262,40 +297,6 @@ public class CandidateProcess {
         this.note = note;
     }
 
-    // Default constructor
-    public CandidateProcess() {
-    }
-
-    // Constructor with all fields
-    public CandidateProcess(Integer candProcessId, LocalDate processDate, String status, String description,
-            Integer candId, Candidates candidate, String candProcessName, Integer screeningId, Screening screening,
-            Integer locationId, Locations location, Integer phoneEvalId, List<PhoneItvEval> phoneItvEvals,
-            Integer offerId, Offers offer, Integer recruitProcessId, RecruitmentProcess recruitmentProcess,
-            String url, String password, Integer interviewerId, Employees interviewer, String note) {
-        this.candProcessId = candProcessId;
-        this.processDate = processDate;
-        this.status = status;
-        this.description = description;
-        this.candId = candId;
-        this.candidate = candidate;
-        this.candProcessName = candProcessName;
-        this.screeningId = screeningId;
-        this.screening = screening;
-        this.locationId = locationId;
-        this.location = location;
-        this.phoneEvalId = phoneEvalId;
-        this.phoneItvEvals = phoneItvEvals;
-        this.offerId = offerId;
-        this.offer = offer;
-        this.recruitProcessId = recruitProcessId;
-        this.recruitmentProcess = recruitmentProcess;
-        this.url = url;
-        this.password = password;
-        this.interviewerId = interviewerId;
-        this.interviewer = interviewer;
-        this.note = note;
-    }
-
     // Static method to create builder
     public static Builder builder() {
         return new Builder();
@@ -438,8 +439,7 @@ public class CandidateProcess {
 
         public CandidateProcess build() {
             return new CandidateProcess(candProcessId, processDate, status, description, candId, candidate,
-                    candProcessName,
-                    screeningId, screening, locationId, location, phoneEvalId, phoneItvEvals,
+                    candProcessName, screeningId, screening, locationId, location, phoneEvalId, phoneItvEvals,
                     offerId, offer, recruitProcessId, recruitmentProcess, url, password,
                     interviewerId, interviewer, note);
         }
