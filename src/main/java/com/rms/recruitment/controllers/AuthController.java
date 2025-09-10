@@ -1,13 +1,12 @@
 package com.rms.recruitment.controllers;
 
-import com.rms.recruitment.dto.AuthRequest;
-import com.rms.recruitment.dto.AuthResponse;
-import com.rms.recruitment.dto.RegisterRequest;
+import com.rms.recruitment.dto.request.AuthRequest;
+import com.rms.recruitment.dto.response.AuthResponse;
+import com.rms.recruitment.dto.request.RegisterRequest;
 import com.rms.recruitment.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,8 +1,12 @@
 package com.rms.recruitment.services.Impl;
 
 import com.rms.recruitment.dto.*;
+import com.rms.recruitment.dto.request.CandidateCreateRequest;
+import com.rms.recruitment.dto.request.CandidateSearchRequest;
 import com.rms.recruitment.models.Candidates;
+import com.rms.recruitment.models.CandidateProcess;
 import com.rms.recruitment.repositories.CandidatesRepository;
+import com.rms.recruitment.repositories.CandidateProcessRepository;
 import com.rms.recruitment.services.CandidateService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,16 +18,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
 
     private final CandidatesRepository candidatesRepository;
+    private final CandidateProcessRepository candidateProcessRepository;
 
-    public CandidateServiceImpl(CandidatesRepository candidatesRepository) {
+    public CandidateServiceImpl(CandidatesRepository candidatesRepository,
+            CandidateProcessRepository candidateProcessRepository) {
         this.candidatesRepository = candidatesRepository;
+        this.candidateProcessRepository = candidateProcessRepository;
     }
 
     @Override
@@ -39,14 +45,13 @@ public class CandidateServiceImpl implements CandidateService {
 
         Pageable pageable = PageRequest.of(searchRequest.getPage(), searchRequest.getSize(), sort);
 
-        // Tạm thời trả về tất cả candidates, sau này sẽ implement search logic
         Page<Candidates> candidatesPage = candidatesRepository.findAll(pageable);
 
         return candidatesPage.map(this::convertToDTO);
     }
 
     @Override
-    public Page<CandidateDTO> getAllCandidates(int page, int size, String sort) {
+    public Page<CandidateListDTO> getAllCandidates(int page, int size, String sort) {
         Sort sortObj = Sort.by(Sort.Direction.DESC, "candId");
         if (sort != null && !sort.isEmpty()) {
             String[] sortParams = sort.split(",");
@@ -58,7 +63,7 @@ public class CandidateServiceImpl implements CandidateService {
         Pageable pageable = PageRequest.of(page, size, sortObj);
         Page<Candidates> candidatesPage = candidatesRepository.findAll(pageable);
 
-        return candidatesPage.map(this::convertToDTO);
+        return candidatesPage.map(this::convertToListDTO);
     }
 
     @Override
@@ -68,7 +73,11 @@ public class CandidateServiceImpl implements CandidateService {
         candidate.setFirstName(createRequest.getFirstName());
         candidate.setLastName(createRequest.getLastName());
         candidate.setDateOfBirth(createRequest.getDateOfBirth());
-        candidate.setGender(createRequest.getGender() != null ? 1 : 0); // Tạm thời
+
+        if (createRequest.getGender() != null) {
+            candidate.setGender(createRequest.getGender().equals("Nam") ? 1 : 0);
+        }
+
         candidate.setMainEmail(createRequest.getMainEmail());
         candidate.setSubEmail(createRequest.getSubEmail());
         candidate.setMainPhone(createRequest.getMainPhone());
@@ -103,6 +112,11 @@ public class CandidateServiceImpl implements CandidateService {
             candidate.setFirstName(updateRequest.getFirstName());
             candidate.setLastName(updateRequest.getLastName());
             candidate.setDateOfBirth(updateRequest.getDateOfBirth());
+
+            if (updateRequest.getGender() != null) {
+                candidate.setGender(updateRequest.getGender().equals("Nam") ? 1 : 0);
+            }
+
             candidate.setMainEmail(updateRequest.getMainEmail());
             candidate.setSubEmail(updateRequest.getSubEmail());
             candidate.setMainPhone(updateRequest.getMainPhone());
@@ -126,66 +140,6 @@ public class CandidateServiceImpl implements CandidateService {
         }
     }
 
-    @Override
-    public void uploadResume(Integer candidateId, String fileName, String fileUrl) {
-        // Tạm thời chỉ log, sau này sẽ implement upload logic
-        System.out.println("Upload resume for candidate " + candidateId + ": " + fileName);
-    }
-
-    @Override
-    public List<ResumeDTO> getCandidateResumes(Integer candidateId) {
-        // Tạm thời trả về dữ liệu mẫu
-        List<ResumeDTO> resumes = new ArrayList<>();
-        resumes.add(ResumeDTO.builder()
-                .resumeId(1)
-                .fileName("Resume_2025.pdf")
-                .fileUrl("/files/resume_2025.pdf")
-                .uploadDate("2025-04-12")
-                .description("CV mới nhất")
-                .build());
-        resumes.add(ResumeDTO.builder()
-                .resumeId(2)
-                .fileName("Resume_2024.pdf")
-                .fileUrl("/files/resume_2024.pdf")
-                .uploadDate("2024-12-01")
-                .description("CV cũ")
-                .build());
-        return resumes;
-    }
-
-    @Override
-    public void addSkill(Integer candidateId, String skillName, String skillType) {
-        // Tạm thời chỉ log, sau này sẽ implement skill management
-        System.out.println("Add skill for candidate " + candidateId + ": " + skillName + " (" + skillType + ")");
-    }
-
-    @Override
-    public List<String> getCandidateSkills(Integer candidateId, String type) {
-        // Tạm thời trả về dữ liệu mẫu
-        if ("HARD".equals(type)) {
-            return Arrays.asList("Java", "Spring Boot", "MySQL", "React");
-        } else if ("SOFT".equals(type)) {
-            return Arrays.asList("Giao tiếp", "Làm việc nhóm", "Giải quyết vấn đề");
-        } else {
-            return Arrays.asList("Java", "Spring Boot", "MySQL", "React", "Giao tiếp", "Làm việc nhóm");
-        }
-    }
-
-    @Override
-    public List<String> getGenders() {
-        return Arrays.asList("Nam", "Nữ", "Khác");
-    }
-
-    @Override
-    public List<String> getNationalities() {
-        return Arrays.asList("Việt Nam", "Hàn Quốc", "Nhật Bản", "Trung Quốc", "Mỹ", "Anh");
-    }
-
-    @Override
-    public List<String> getRecruitmentSources() {
-        return Arrays.asList("TopDev", "ITviec", "Skype", "Nội bộ", "Facebook", "LinkedIn");
-    }
-
     private CandidateDTO convertToDTO(Candidates candidate) {
         return CandidateDTO.builder()
                 .candidateId(candidate.getCandId())
@@ -195,26 +149,100 @@ public class CandidateServiceImpl implements CandidateService {
                 .lastName(candidate.getLastName())
                 .fullName(candidate.getFirstName() + " " + candidate.getLastName())
                 .dateOfBirth(candidate.getDateOfBirth())
-                .gender(candidate.getGender() != null && candidate.getGender() == 1 ? "Nam" : "Nữ")
+                .gender(getGenderName(candidate))
                 .nationality(candidate.getNationality())
                 .mainEmail(candidate.getMainEmail())
                 .subEmail(candidate.getSubEmail())
                 .mainPhone(candidate.getMainPhone())
                 .subPhone(candidate.getSubPhone())
+
+                // hard code
                 .primaryLanguage("Tiếng Việt")
                 .secondaryLanguage("Tiếng Anh")
-                .recruitmentSource("TopDev")
+                .recruitmentSource(getRecruitmentSource(candidate))
                 .referrer(candidate.getReferredBy())
                 .maritalStatus("Độc thân")
-                .address("374 Lê Văn Toán phường Tân Hiệp Quận Nhà Bè")
+                .address("Chưa cập nhật")
                 .qualifications(candidate.getNote())
-                .hardSkills(Arrays.asList("Java", "Spring Boot", "MySQL"))
-                .softSkills(Arrays.asList("Giao tiếp", "Làm việc nhóm"))
-                .resumes(getCandidateResumes(candidate.getCandId()))
-                .lastUpdatedBy("HR1")
-                .lastUpdatedAt("12:00:00 12/04/2025")
+                .hardSkills(Arrays.asList("Chưa cập nhật"))
+                .softSkills(Arrays.asList("Chưa cập nhật"))
+                .resumes(new ArrayList<>())
+                .lastUpdatedBy("System")
+                .lastUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy")))
                 .recruitmentId(candidate.getJobTitleId())
-                .recruitmentCode("BA_Mid.ITPS.01/2025")
+                .recruitmentCode(getRecruitmentCode(candidate))
                 .build();
+    }
+
+    private CandidateListDTO convertToListDTO(Candidates candidate) {
+        return CandidateListDTO.builder()
+                .candidateId(candidate.getCandId())
+                .candidateCode("UV" + candidate.getCandId() + "-" +
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM.yyyy")))
+                .fullName(candidate.getFirstName() + " " + candidate.getLastName())
+                .recruitmentSource(getRecruitmentSource(candidate))
+                .recruitmentCode(getRecruitmentCode(candidate))
+                .progress(getProgress(candidate))
+                .status(getStatus(candidate))
+                .build();
+    }
+
+    private String getRecruitmentSource(Candidates candidate) {
+        // Lấy từ trường referredBy
+        if (candidate.getReferredBy() != null && !candidate.getReferredBy().isEmpty()) {
+            return candidate.getReferredBy();
+        }
+
+        return "Chưa xác định";
+    }
+
+    private String getRecruitmentCode(Candidates candidate) {
+        // Lấy từ jobTitle -> recruitment
+        if (candidate.getJobTitle() != null && candidate.getJobTitle().getRecruitment() != null) {
+            return candidate.getJobTitle().getRecruitment().getRecruitmentCode();
+        }
+
+        // Nếu không có recruitment, tạo từ jobTitle
+        if (candidate.getJobTitle() != null) {
+            return candidate.getJobTitle().getPosition() + "_" + candidate.getJobTitle().getLevel();
+        }
+
+        return "Chưa xác định";
+    }
+
+    private String getProgress(Candidates candidate) {
+        // Lấy process mới nhất từ candidate_process
+        Optional<CandidateProcess> latestProcess = candidateProcessRepository.findLatestByCandId(candidate.getCandId());
+
+        if (latestProcess.isPresent()) {
+            return latestProcess.get().getCandProcessName();
+        }
+
+        return "Chưa có tiến độ"; // Mặc định nếu chưa có process
+    }
+
+    private String getStatus(Candidates candidate) {
+        // Lấy status mới nhất từ candidate_process
+        Optional<CandidateProcess> latestProcess = candidateProcessRepository.findLatestByCandId(candidate.getCandId());
+
+        if (latestProcess.isPresent()) {
+            return latestProcess.get().getStatus();
+        }
+
+        return "Chưa có trạng thái"; // Mặc định nếu chưa có process
+    }
+
+    private String getGenderName(Candidates candidate) {
+        // Lấy từ MasterData thông qua genderMasterData
+        if (candidate.getGenderMasterData() != null) {
+            return candidate.getGenderMasterData().getName();
+        }
+
+        // Fallback nếu không có MasterData
+        if (candidate.getGender() != null) {
+            return candidate.getGender() == 1 ? "Nam" : "Nữ";
+        }
+
+        return "Chưa xác định";
     }
 }

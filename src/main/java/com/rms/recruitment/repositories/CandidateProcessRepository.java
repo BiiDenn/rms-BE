@@ -21,4 +21,14 @@ public interface CandidateProcessRepository extends JpaRepository<CandidateProce
     List<CandidateProcess> findTimelineByCandidateAndRecruitProcess(
             @Param("candidateId") Integer candidateId,
             @Param("recruitProcessId") Integer recruitProcessId);
+            
+    // Lấy tất cả process của một candidate, sắp xếp theo ngày mới nhất
+    List<CandidateProcess> findByCandIdOrderByProcessDateDesc(Integer candId);
+
+    // Lấy process mới nhất của một candidate
+    @Query("SELECT cp FROM CandidateProcess cp WHERE cp.candId = :candId ORDER BY cp.processDate DESC LIMIT 1")
+    Optional<CandidateProcess> findLatestByCandId(@Param("candId") Integer candId);
+
+    // Lấy process theo tên process
+    List<CandidateProcess> findByCandIdAndCandProcessNameOrderByProcessDateDesc(Integer candId, String processName);
 }
