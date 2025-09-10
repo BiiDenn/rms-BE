@@ -135,14 +135,6 @@ public class Candidates {
         this.jobTitleId = jobTitleId;
     }
 
-    public MasterData getGenderMasterData() {
-        return genderMasterData;
-    }
-
-    public void setGenderMasterData(MasterData genderMasterData) {
-        this.genderMasterData = genderMasterData;
-    }
-
     public Employees getEmployee() {
         return employee;
     }
@@ -183,6 +175,18 @@ public class Candidates {
     @Column(name = "referredBy", length = 255)
     private String referredBy;
 
+    @Column(name = "primaryLanguage", length = 100)
+    private String primaryLanguage;
+
+    @Column(name = "secondaryLanguage", length = 100)
+    private String secondaryLanguage;
+
+    @Column(name = "recruitmentSource", length = 255)
+    private String recruitmentSource;
+
+    @Column(name = "maritalStatus", length = 50)
+    private String maritalStatus;
+
     @Lob
     @Column(name = "note")
     private String note;
@@ -194,14 +198,42 @@ public class Candidates {
     private Integer jobTitleId;
 
     @ManyToOne
-    @JoinColumn(name = "gender", referencedColumnName = "MasterDataID", insertable = false, updatable = false)
-    private MasterData genderMasterData;
-
-    @ManyToOne
     @JoinColumn(name = "employeeId", referencedColumnName = "employeeId", insertable = false, updatable = false)
     private Employees employee;
 
     @ManyToOne
     @JoinColumn(name = "jobTitleId", referencedColumnName = "jobTitleId", insertable = false, updatable = false)
     private JobTitles jobTitle;
+
+    public String getPrimaryLanguage() {
+        return primaryLanguage;
+    }
+
+    public void setPrimaryLanguage(String primaryLanguage) {
+        this.primaryLanguage = primaryLanguage;
+    }
+
+    public String getSecondaryLanguage() {
+        return secondaryLanguage;
+    }
+
+    public void setSecondaryLanguage(String secondaryLanguage) {
+        this.secondaryLanguage = secondaryLanguage;
+    }
+
+    public String getRecruitmentSource() {
+        return recruitmentSource;
+    }
+
+    public void setRecruitmentSource(String recruitmentSource) {
+        this.recruitmentSource = recruitmentSource;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
 }
