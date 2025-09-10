@@ -197,6 +197,7 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     private String getRecruitmentSource(Candidates candidate) {
+        // Lấy trực tiếp từ trường recruitmentSource (nguồn ứng tuyển nhập tay)
         if (candidate.getRecruitmentSource() != null && !candidate.getRecruitmentSource().isEmpty()) {
             return candidate.getRecruitmentSource();
         }
