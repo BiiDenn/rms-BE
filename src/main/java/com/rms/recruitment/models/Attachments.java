@@ -37,11 +37,4 @@ public class Attachments {
     @Column(name = "UploadDate")
     private LocalDate uploadDate;
 
-    @ManyToOne
-    @JoinColumn(name = "FileType", referencedColumnName = "MasterDataID", insertable = false, updatable = false)
-    private MasterData fileTypeMasterData;
-
-    @ManyToOne
-    @JoinColumn(name = "FileFormat", referencedColumnName = "MasterDataID", insertable = false, updatable = false)
-    private MasterData fileFormatMasterData;
 }
