@@ -16,4 +16,20 @@ public class CreateRecruitmentProcessRequest {
     private Integer recruitId;
     
     private String recruitProcessStatus;
+
+    public @NotNull(message = "recruitId is required") Integer getRecruitId() {
+        return recruitId;
+    }
+
+    public void setRecruitId(@NotNull(message = "recruitId is required") Integer recruitId) {
+        this.recruitId = recruitId;
+    }
+
+    public String getRecruitProcessStatus() {
+        return recruitProcessStatus;
+    }
+
+    public void setRecruitProcessStatus(String recruitProcessStatus) {
+        this.recruitProcessStatus = recruitProcessStatus;
+    }
 }

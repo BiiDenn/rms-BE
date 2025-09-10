@@ -219,6 +219,14 @@ public class CandidateServiceImpl implements CandidateService {
         return "Chưa xác định";
     }
 
+    public CandidatesRepository getCandidatesRepository() {
+        return candidatesRepository;
+    }
+
+    public CandidateProcessRepository getCandidateProcessRepository() {
+        return candidateProcessRepository;
+    }
+
     private String getProgress(Candidates candidate) {
         // Lấy process mới nhất từ candidate_process
         Optional<CandidateProcess> latestProcess = candidateProcessRepository.findLatestByCandId(candidate.getCandId());

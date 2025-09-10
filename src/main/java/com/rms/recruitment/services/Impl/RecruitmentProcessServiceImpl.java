@@ -148,6 +148,18 @@ public class RecruitmentProcessServiceImpl implements RecruitmentProcessService 
         return mapToResponse(processToReturn);
     }
 
+    public RecruitmentProcessRepository getRecruitmentProcessRepository() {
+        return recruitmentProcessRepository;
+    }
+
+    public CandidatesRepository getCandidatesRepository() {
+        return candidatesRepository;
+    }
+
+    public CandidateProcessRepository getCandidateProcessRepository() {
+        return candidateProcessRepository;
+    }
+
     @Override
     public List<CandidateProcessTimelineItemResponse> getCandidateProcessTimeline(Integer candidateId, Integer recruitProcessId) {
         List<CandidateProcess> items = candidateProcessRepository
