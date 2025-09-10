@@ -1,4 +1,4 @@
-package com.rms.recruitment.dto;
+package com.rms.recruitment.dto.request;
 
 import com.rms.recruitment.enums.RoleType;
 import jakarta.validation.constraints.NotNull;

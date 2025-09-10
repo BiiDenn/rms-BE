@@ -1,6 +1,7 @@
 package com.rms.recruitment.services.Impl;
 
 import com.rms.recruitment.dto.*;
+import com.rms.recruitment.dto.request.ProgressStepCreateRequest;
 import com.rms.recruitment.services.ProgressService;
 import org.springframework.stereotype.Service;
 

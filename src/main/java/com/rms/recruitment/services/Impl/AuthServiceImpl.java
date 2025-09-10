@@ -1,8 +1,8 @@
 package com.rms.recruitment.services.Impl;
 
-import com.rms.recruitment.dto.AuthRequest;
-import com.rms.recruitment.dto.AuthResponse;
-import com.rms.recruitment.dto.RegisterRequest;
+import com.rms.recruitment.dto.request.AuthRequest;
+import com.rms.recruitment.dto.response.AuthResponse;
+import com.rms.recruitment.dto.request.RegisterRequest;
 import com.rms.recruitment.models.Accounts;
 import com.rms.recruitment.repositories.AccountRepository;
 import com.rms.recruitment.security.JwtUtil;

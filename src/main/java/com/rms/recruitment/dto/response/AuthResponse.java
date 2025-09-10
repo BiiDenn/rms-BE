@@ -1,4 +1,4 @@
-package com.rms.recruitment.dto;
+package com.rms.recruitment.dto.response;
 
 public class AuthResponse {
     private String token;
