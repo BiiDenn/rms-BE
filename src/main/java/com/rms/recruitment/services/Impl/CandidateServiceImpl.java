@@ -201,9 +201,8 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     private String getRecruitmentSource(Candidates candidate) {
-        // Lấy từ trường referredBy
-        if (candidate.getReferredBy() != null && !candidate.getReferredBy().isEmpty()) {
-            return candidate.getReferredBy();
+        if (candidate.getRecruitmentSource() != null && !candidate.getRecruitmentSource().isEmpty()) {
+            return candidate.getRecruitmentSource();
         }
 
         return null;
