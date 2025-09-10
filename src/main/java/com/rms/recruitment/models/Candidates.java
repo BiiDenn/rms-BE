@@ -190,6 +190,21 @@ public class Candidates {
     @Column(name = "expectedOnboardDate")
     private LocalDate expectedOnboardDate;
 
+    @Column(name = "roomNumber", length = 50)
+    private String roomNumber;
+
+    @Column(name = "houseNumber", length = 50)
+    private String houseNumber;
+
+    @Column(name = "zipcode", length = 20)
+    private String zipcode;
+
+    @Column(name = "street", length = 255)
+    private String street;
+
+    @Column(name = "addressDescription", length = 500)
+    private String addressDescription;
+
     @Lob
     @Column(name = "note")
     private String note;
@@ -246,5 +261,45 @@ public class Candidates {
 
     public void setExpectedOnboardDate(LocalDate expectedOnboardDate) {
         this.expectedOnboardDate = expectedOnboardDate;
+    }
+
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getAddressDescription() {
+        return addressDescription;
+    }
+
+    public void setAddressDescription(String addressDescription) {
+        this.addressDescription = addressDescription;
     }
 }
