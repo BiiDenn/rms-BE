@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Builder
@@ -152,22 +151,6 @@ public class Candidates {
         this.jobTitle = jobTitle;
     }
 
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public LocalDate getExpectedOnboardDate() {
-        return expectedOnboardDate;
-    }
-
-    public void setExpectedOnboardDate(LocalDate expectedOnboardDate) {
-        this.expectedOnboardDate = expectedOnboardDate;
-    }
-
     @Column(name = "gender")
     private Integer gender;
 
@@ -203,6 +186,9 @@ public class Candidates {
 
     @Column(name = "maritalStatus", length = 50)
     private String maritalStatus;
+
+    @Column(name = "expectedOnboardDate")
+    private LocalDate expectedOnboardDate;
 
     @Lob
     @Column(name = "note")
@@ -252,5 +238,13 @@ public class Candidates {
 
     public void setMaritalStatus(String maritalStatus) {
         this.maritalStatus = maritalStatus;
+    }
+
+    public LocalDate getExpectedOnboardDate() {
+        return expectedOnboardDate;
+    }
+
+    public void setExpectedOnboardDate(LocalDate expectedOnboardDate) {
+        this.expectedOnboardDate = expectedOnboardDate;
     }
 }
