@@ -16,9 +16,11 @@ import com.rms.recruitment.services.RecruitmentProcessService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,46 +40,59 @@ public class RecruitmentProcessServiceImpl implements RecruitmentProcessService 
 
     @Override
     public List<RecruitmentProcessResponse> getRecruitmentProcessesByCandidateId(Integer candidateId) {
-        List<RecruitmentProcess> processes = recruitmentProcessRepository.findByCandidateId(candidateId);
-        // Debug log
-        System.out.println("Found " + processes.size() + " processes for candidate " + candidateId);
-        for (RecruitmentProcess process : processes) {
-            System.out.println("Process ID: " + process.getRecruitProcessId());
-            System.out.println("Status: " + process.getRecruitProcessStatus());
-            if (process.getRecruitment() != null) {
-                System.out.println("Recruitment Title: " + process.getRecruitment().getTitle());
-                System.out.println("Recruitment Code: " + process.getRecruitment().getRecruitmentCode());
-                if (process.getRecruitment().getDivision() != null) {
-                    System.out.println("Division: " + process.getRecruitment().getDivision().getDivisionName());
+        // Get from candidate_process table, group by recruitProcessId
+        List<CandidateProcess> candidateProcesses = candidateProcessRepository.findByCandId(candidateId);
+        
+        // Group by recruitProcessId and get unique recruitment processes
+        Map<Integer, List<CandidateProcess>> groupedByRecruitProcess = candidateProcesses.stream()
+                .collect(Collectors.groupingBy(CandidateProcess::getRecruitProcessId));
+        
+        List<RecruitmentProcessResponse> responses = new ArrayList<>();
+        for (Map.Entry<Integer, List<CandidateProcess>> entry : groupedByRecruitProcess.entrySet()) {
+            Integer recruitProcessId = entry.getKey();
+            List<CandidateProcess> processes = entry.getValue();
+            
+            if (!processes.isEmpty()) {
+                // Get recruitment process details
+                RecruitmentProcess recruitmentProcess = recruitmentProcessRepository
+                        .findByIdWithRelations(recruitProcessId)
+                        .orElse(null);
+                
+                if (recruitmentProcess != null) {
+                    responses.add(mapToResponse(recruitmentProcess));
                 }
             }
         }
-        return processes.stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+        
+        return responses;
     }
 
     @Override
     public RecruitmentProcessResponse createRecruitmentProcess(Integer candidateId, CreateRecruitmentProcessRequest request) {
         System.out.println("=== CREATE RECRUITMENT PROCESS DEBUG ===");
         System.out.println("Candidate ID: " + candidateId);
-        System.out.println("RecruitProcess ID: " + request.getRecruitProcessId());
+        System.out.println("Recruit ID: " + request.getRecruitId());
         System.out.println("Status: " + request.getRecruitProcessStatus());
 
         // Validate candidate exists
         candidatesRepository.findById(candidateId)
                 .orElseThrow(() -> new RuntimeException("Candidate not found with ID: " + candidateId));
 
-        // Require existing recruitment_process; do not create a new one
-        RecruitmentProcess savedProcess = recruitmentProcessRepository.findByIdWithRelations(request.getRecruitProcessId())
-                .orElseThrow(() -> new RuntimeException("Recruitment process not found: " + request.getRecruitProcessId()));
-        System.out.println("Using existing Process ID: " + savedProcess.getRecruitProcessId());
+        // Create new recruitment_process
+        RecruitmentProcess newProcess = RecruitmentProcess.builder()
+                .recruitId(request.getRecruitId())
+                .recruitProcessStatus(request.getRecruitProcessStatus() != null ? 
+                        request.getRecruitProcessStatus() : "In Progress")
+                .createdAt(LocalDateTime.now())
+                .build();
+        
+        RecruitmentProcess savedProcess = recruitmentProcessRepository.save(newProcess);
+        System.out.println("Created new Process ID: " + savedProcess.getRecruitProcessId());
 
         // Fetch the saved process with relationships
         RecruitmentProcess processWithRelations = recruitmentProcessRepository.findByIdWithRelations(savedProcess.getRecruitProcessId())
                 .orElseThrow(() -> new RuntimeException("Failed to fetch created process"));
 
-        // For linking-only flow, we simply use the fetched process with relations
         RecruitmentProcess processToReturn = processWithRelations;
 
         System.out.println("Final Process - ID: " + processToReturn.getRecruitProcessId());
@@ -114,7 +129,7 @@ public class RecruitmentProcessServiceImpl implements RecruitmentProcessService 
                     .recruitProcessId(savedProcess.getRecruitProcessId())
                     .processDate(today)
                     .status("Pending")
-                    .candidateProcessType(step)
+                    .candProcessName(step)
                     .build();
             toSave.add(cp);
         }
@@ -129,21 +144,21 @@ public class RecruitmentProcessServiceImpl implements RecruitmentProcessService 
         List<CandidateProcess> items = candidateProcessRepository
                 .findTimelineByCandidateAndRecruitProcess(candidateId, recruitProcessId);
 
-        return items.stream().map(cp -> {
-            String typeName = cp.getCandProcessType() != null ? cp.getCandProcessType().getName() : null;
+        return items.stream().<CandidateProcessTimelineItemResponse>map(cp -> {
+            String typeName = cp.getCandProcessName();
             String interviewerName = cp.getInterviewer() != null ?
                     String.format("%s %s",
                             cp.getInterviewer().getFirstName() != null ? cp.getInterviewer().getFirstName() : "",
                             cp.getInterviewer().getLastName() != null ? cp.getInterviewer().getLastName() : ""
                     ).trim() : null;
-            String interviewerEmail = cp.getInterviewerEmail();
+            String interviewerEmail = null;
             String locationName = cp.getLocation() != null ? cp.getLocation().getLocationName() : null;
 
             return CandidateProcessTimelineItemResponse.builder()
                     .id(cp.getCandProcessId())
                     .processDate(cp.getProcessDate())
-                    .typeId(cp.getCandProcessTypeId())
-                    .typeName(typeName != null ? typeName : cp.getCandidateProcessType())
+                    .typeId(null)
+                    .typeName(typeName)
                     .status(cp.getStatus())
                     .description(cp.getDescription())
                     .interviewerId(cp.getInterviewerId())
@@ -232,8 +247,9 @@ public class RecruitmentProcessServiceImpl implements RecruitmentProcessService 
         }
         String status = process.getRecruitProcessStatus() != null ?
                 process.getRecruitProcessStatus() : "N/A";
-        System.out.println("Mapping - Title: " + recruitmentTitle + ", Status: " + status + ", Code: " + code);
+        System.out.println("Mapping - ID: " + process.getRecruitProcessId() + ", Title: " + recruitmentTitle + ", Status: " + status + ", Code: " + code);
         return RecruitmentProcessResponse.builder()
+                .id(process.getRecruitProcessId())
                 .recruitmentTitle(recruitmentTitle)
                 .status(status)
                 .code(code)

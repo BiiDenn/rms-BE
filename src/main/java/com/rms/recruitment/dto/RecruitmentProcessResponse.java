@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecruitmentProcessResponse {
+    private Integer id; // recruitProcessId
     private String recruitmentTitle;
     private String status;
     private String code;

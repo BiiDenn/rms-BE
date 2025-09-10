@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateRecruitmentProcessRequest {
-    // Always link to an existing recruitment_process
-    @NotNull(message = "recruitProcessId is required")
-    private Integer recruitProcessId;
+    // Create new recruitment_process
+    @NotNull(message = "recruitId is required")
+    private Integer recruitId;
     
     private String recruitProcessStatus;
 }

@@ -14,7 +14,6 @@ public interface CandidateProcessRepository extends JpaRepository<CandidateProce
     List<CandidateProcess> findByRecruitProcessId(Integer recruitProcessId);
 
     @Query("SELECT cp FROM CandidateProcess cp " +
-           "LEFT JOIN FETCH cp.candProcessType m " +
            "LEFT JOIN FETCH cp.location l " +
            "LEFT JOIN FETCH cp.interviewer iv " +
            "WHERE cp.candId = :candidateId AND cp.recruitProcessId = :recruitProcessId " +
