@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Builder
@@ -144,7 +145,7 @@ public class Candidates {
     }
 
     public Employees getEmployee() {
-        return employee;
+return employee;
     }
 
     public void setEmployee(Employees employee) {
@@ -226,4 +227,16 @@ public class Candidates {
 
     @Column(name = "expectedOnboardDate")
     private LocalDate expectedOnboardDate;
+
+    // One-to-Many relationship with CandidateProcess
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CandidateProcess> candidateProcesses;
+
+    public List<CandidateProcess> getCandidateProcesses() {
+        return candidateProcesses;
+    }
+
+    public void setCandidateProcesses(List<CandidateProcess> candidateProcesses) {
+        this.candidateProcesses = candidateProcesses;
+    }
 }

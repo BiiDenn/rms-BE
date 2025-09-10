@@ -4,6 +4,10 @@ import com.rms.recruitment.dto.CandidateProcessTimelineItemResponse;
 import com.rms.recruitment.dto.CreateRecruitmentProcessRequest;
 import com.rms.recruitment.dto.RecruitmentProcessResponse;
 import com.rms.recruitment.dto.InterviewOverviewResponse;
+import com.rms.recruitment.dto.JobOfferResponse;
+import com.rms.recruitment.dto.CreateOfferRequest;
+import com.rms.recruitment.dto.OfferResponse;
+import com.rms.recruitment.dto.OnboardingInfoResponse;
 import com.rms.recruitment.services.RecruitmentProcessService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,5 +76,40 @@ public class CandidateProcessController {
             @PathVariable Integer recruitProcessId) {
         InterviewOverviewResponse overview = recruitmentProcessService.getInterviewOverview(candidateId, recruitProcessId);
         return ResponseEntity.ok(overview);
+    }
+
+    @GetMapping("/{candidateId}/recruitment-processes/{recruitProcessId}/JobOffer")
+    @Operation(summary = "Get job offer information",
+            description = "Return job position information including job title, department, and branch")
+    public ResponseEntity<JobOfferResponse> getJobOffer(
+            @PathVariable Integer candidateId,
+            @PathVariable Integer recruitProcessId) {
+        JobOfferResponse jobOffer = recruitmentProcessService.getJobOffer(candidateId, recruitProcessId);
+        return ResponseEntity.ok(jobOffer);
+    }
+
+    @PostMapping("/{candidateId}/recruitment-processes/{recruitProcessId}/JobOffer")
+    @Operation(summary = "Create job offer",
+            description = "Create a new job offer with salary and onboard information")
+    public ResponseEntity<OfferResponse> createOffer(
+            @PathVariable Integer candidateId,
+            @PathVariable Integer recruitProcessId,
+            @Valid @RequestBody CreateOfferRequest request) {
+        try {
+            OfferResponse response = recruitmentProcessService.createOffer(candidateId, recruitProcessId, request);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/{candidateId}/recruitment-processes/{recruitProcessId}/onboarding")
+    @Operation(summary = "Get candidate onboarding information",
+            description = "Return candidate information for onboarding process")
+    public ResponseEntity<OnboardingInfoResponse> getOnboardingInfo(
+            @PathVariable Integer candidateId,
+            @PathVariable Integer recruitProcessId) {
+        OnboardingInfoResponse onboardingInfo = recruitmentProcessService.getOnboardingInfo(candidateId, recruitProcessId);
+        return ResponseEntity.ok(onboardingInfo);
     }
 }

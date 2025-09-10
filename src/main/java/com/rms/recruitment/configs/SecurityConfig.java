@@ -69,6 +69,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/candidates/*/recruitment-processes").permitAll()
                         .requestMatchers("/api/candidates/*/recruitment-processes/*/processes").permitAll()
                         .requestMatchers("/api/candidates/*/recruitment-processes/*/interview-evaluation/overview").permitAll()
+                        .requestMatchers("/api/candidates/*/recruitment-processes/*/JobOffer").permitAll()
+                        .requestMatchers("/api/candidates/*/recruitment-processes/*/onboarding").permitAll()
                         .requestMatchers("/api/roles/**").hasAuthority("MANAGE_PERMISSIONS")
                         .requestMatchers("/api/interviews/**")
                         .hasAnyAuthority("CONDUCT_INTERVIEW", "EVALUATE_CANDIDATES")

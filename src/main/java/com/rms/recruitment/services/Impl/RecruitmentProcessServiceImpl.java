@@ -7,11 +7,17 @@ import com.rms.recruitment.dto.InterviewOverviewResponse;
 import com.rms.recruitment.dto.InterviewOverviewResponseCandidate;
 import com.rms.recruitment.dto.InterviewOverviewResponseSession;
 import com.rms.recruitment.dto.InterviewOverviewResponseInterviewer;
+import com.rms.recruitment.dto.JobOfferResponse;
+import com.rms.recruitment.dto.CreateOfferRequest;
+import com.rms.recruitment.dto.OfferResponse;
+import com.rms.recruitment.dto.OnboardingInfoResponse;
 import com.rms.recruitment.models.CandidateProcess;
 import com.rms.recruitment.models.RecruitmentProcess;
+import com.rms.recruitment.models.Offers;
 import com.rms.recruitment.repositories.CandidateProcessRepository;
 import com.rms.recruitment.repositories.CandidatesRepository;
 import com.rms.recruitment.repositories.RecruitmentProcessRepository;
+import com.rms.recruitment.repositories.OffersRepository;
 import com.rms.recruitment.services.RecruitmentProcessService;
 import org.springframework.stereotype.Service;
 
@@ -29,13 +35,16 @@ public class RecruitmentProcessServiceImpl implements RecruitmentProcessService 
     private final RecruitmentProcessRepository recruitmentProcessRepository;
     private final CandidatesRepository candidatesRepository;
     private final CandidateProcessRepository candidateProcessRepository;
+    private final OffersRepository offersRepository;
 
     public RecruitmentProcessServiceImpl(RecruitmentProcessRepository recruitmentProcessRepository,
                                        CandidatesRepository candidatesRepository,
-                                       CandidateProcessRepository candidateProcessRepository) {
+                                       CandidateProcessRepository candidateProcessRepository,
+                                       OffersRepository offersRepository) {
         this.recruitmentProcessRepository = recruitmentProcessRepository;
         this.candidatesRepository = candidatesRepository;
         this.candidateProcessRepository = candidateProcessRepository;
+        this.offersRepository = offersRepository;
     }
 
     @Override
@@ -225,6 +234,118 @@ public class RecruitmentProcessServiceImpl implements RecruitmentProcessService 
                 .candidateInfo(candidateInfo)
                 .interviewSessionInfo(sessionInfo)
                 .interviewerInfo(interviewerInfo)
+                .build();
+    }
+
+    @Override
+    public JobOfferResponse getJobOffer(Integer candidateId, Integer recruitProcessId) {
+        // Get candidate info
+        var candidate = candidatesRepository.findById(candidateId)
+                .orElseThrow(() -> new RuntimeException("Candidate not found: " + candidateId));
+
+        // Get recruitment process info
+        var rpOpt = recruitmentProcessRepository.fetchRecruitmentInfoByProcessId(recruitProcessId);
+        var rp = rpOpt.orElseThrow(() -> new RuntimeException("Recruitment process not found: " + recruitProcessId));
+
+        // Get name from candidate (firstName + lastName)
+        String name = String.format("%s %s",
+                candidate.getFirstName() != null ? candidate.getFirstName() : "",
+                candidate.getLastName() != null ? candidate.getLastName() : "").trim();
+
+        // Get job title from recruitment
+        String jobTitle = null;
+        if (rp.getRecruitment() != null) {
+            jobTitle = rp.getRecruitment().getTitle();
+        }
+
+        // Get department from division
+        String department = null;
+        if (rp.getRecruitment() != null && rp.getRecruitment().getDivision() != null) {
+            department = rp.getRecruitment().getDivision().getDivisionName();
+        }
+
+        // Branch - for now set as default, can be enhanced later
+        String branch = "Trụ sở chính";
+
+        return JobOfferResponse.builder()
+                .name(name)
+                .jobTitle(jobTitle)
+                .department(department)
+                .branch(branch)
+                .build();
+    }
+
+    @Override
+    public OfferResponse createOffer(Integer candidateId, Integer recruitProcessId, CreateOfferRequest request) {
+        // Validate candidate exists
+        candidatesRepository.findById(candidateId)
+                .orElseThrow(() -> new RuntimeException("Candidate not found with ID: " + candidateId));
+
+        // Validate recruitment process exists
+        recruitmentProcessRepository.findById(recruitProcessId)
+                .orElseThrow(() -> new RuntimeException("Recruitment process not found with ID: " + recruitProcessId));
+
+        // Create new offer
+        Offers newOffer = Offers.builder()
+                .onboardDate(request.getOnboardDate())
+                .offerPosition(request.getOfferPosition())
+                .basicSalary(request.getBasicSalary())
+                .allowances(request.getAllowances())
+                .bonuses(request.getBonuses())
+                .totalFormalIncome(request.getTotalFormalIncome())
+                .totalProbationaryIncome(request.getTotalProbationaryIncome())
+                .jobTitleId(request.getJobTitleId())
+                .status("Pending")  // Default status
+                .build();
+
+        Offers savedOffer = offersRepository.save(newOffer);
+
+        return OfferResponse.builder()
+                .offerId(savedOffer.getOfferId())
+                .onboardDate(savedOffer.getOnboardDate())
+                .offerPosition(savedOffer.getOfferPosition())
+                .basicSalary(savedOffer.getBasicSalary())
+                .allowances(savedOffer.getAllowances())
+                .bonuses(savedOffer.getBonuses())
+                .totalFormalIncome(savedOffer.getTotalFormalIncome())
+                .totalProbationaryIncome(savedOffer.getTotalProbationaryIncome())
+                .status(savedOffer.getStatus())
+                .build();
+    }
+
+    @Override
+    public OnboardingInfoResponse getOnboardingInfo(Integer candidateId, Integer recruitProcessId) {
+        // Get candidate info
+        var candidate = candidatesRepository.findById(candidateId)
+                .orElseThrow(() -> new RuntimeException("Candidate not found: " + candidateId));
+
+        // Get recruitment process info
+        var rpOpt = recruitmentProcessRepository.fetchRecruitmentInfoByProcessId(recruitProcessId);
+        var rp = rpOpt.orElseThrow(() -> new RuntimeException("Recruitment process not found: " + recruitProcessId));
+
+        // Get name from candidate (firstName + lastName)
+        String fullName = String.format("%s %s",
+                candidate.getFirstName() != null ? candidate.getFirstName() : "",
+                candidate.getLastName() != null ? candidate.getLastName() : "").trim();
+
+        // Get job title from recruitment
+        String jobTitle = null;
+        if (rp.getRecruitment() != null) {
+            jobTitle = rp.getRecruitment().getTitle();
+        }
+
+        // Get expected onboard date from offers (latest offer for this recruitment process)
+        LocalDate expectedOnboardDate = null;
+        // Note: We need to find the offer related to this recruitment process
+        // For now, we'll get it from candidate's expected onboard date or set to null
+        expectedOnboardDate = candidate.getExpectedOnboardDate();
+
+        return OnboardingInfoResponse.builder()
+                .fullName(fullName)
+                .dateOfBirth(candidate.getDateOfBirth())
+                .maritalStatus(candidate.getMaritalStatus())
+                .expectedOnboardDate(expectedOnboardDate)
+                .jobTitle(jobTitle)
                 .build();
     }
 
