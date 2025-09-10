@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -88,6 +86,13 @@ public class CandidateServiceImpl implements CandidateService {
         candidate.setRecruitmentSource(createRequest.getRecruitmentSource());
         candidate.setReferredBy(createRequest.getReferrer());
         candidate.setMaritalStatus(createRequest.getMaritalStatus());
+        if (createRequest.getAddress() != null) {
+            candidate.setRoomNumber(createRequest.getAddress().getRoomNumber());
+            candidate.setHouseNumber(createRequest.getAddress().getHouseNumber());
+            candidate.setZipcode(createRequest.getAddress().getZipcode());
+            candidate.setStreet(createRequest.getAddress().getStreet());
+            candidate.setAddressDescription(createRequest.getAddress().getDescription());
+        }
         candidate.setNote(createRequest.getQualifications());
         candidate.setJobTitleId(createRequest.getRecruitmentId());
 
@@ -131,6 +136,13 @@ public class CandidateServiceImpl implements CandidateService {
             candidate.setRecruitmentSource(updateRequest.getRecruitmentSource());
             candidate.setReferredBy(updateRequest.getReferrer());
             candidate.setMaritalStatus(updateRequest.getMaritalStatus());
+            if (updateRequest.getAddress() != null) {
+                candidate.setRoomNumber(updateRequest.getAddress().getRoomNumber());
+                candidate.setHouseNumber(updateRequest.getAddress().getHouseNumber());
+                candidate.setZipcode(updateRequest.getAddress().getZipcode());
+                candidate.setStreet(updateRequest.getAddress().getStreet());
+                candidate.setAddressDescription(updateRequest.getAddress().getDescription());
+            }
             candidate.setNote(updateRequest.getQualifications());
 
             Candidates updatedCandidate = candidatesRepository.save(candidate);
@@ -205,14 +217,6 @@ public class CandidateServiceImpl implements CandidateService {
 
         // Không tự sinh nếu không có liên kết dữ liệu thật
         return null;
-    }
-
-    public CandidatesRepository getCandidatesRepository() {
-        return candidatesRepository;
-    }
-
-    public CandidateProcessRepository getCandidateProcessRepository() {
-        return candidateProcessRepository;
     }
 
     private String getProgress(Candidates candidate) {
