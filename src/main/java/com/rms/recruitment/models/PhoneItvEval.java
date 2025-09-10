@@ -24,7 +24,7 @@ public class PhoneItvEval {
     @Lob
     @Column(name = "workingExps")
     private String workingExps;
-  
+
     @Lob
     @Column(name = "objective")
     private String objective;
@@ -58,8 +58,12 @@ public class PhoneItvEval {
     @JoinColumn(name = "employeeId", referencedColumnName = "employeeId", insertable = false, updatable = false)
     private Employees employee;
 
-    @OneToMany(mappedBy = "phoneItvEval")
-    private List<CandidateProcess> candidateProcesses;
+    @Column(name = "cand_process_id")
+    private Integer candProcessId;
+
+    @ManyToOne
+    @JoinColumn(name = "cand_process_id", referencedColumnName = "candProcessId", insertable = false, updatable = false)
+    private CandidateProcess candidateProcess;
 
     @OneToMany(mappedBy = "phoneItvEval")
     private List<PhoneItvExperience> experiences;
