@@ -1,15 +1,16 @@
 package com.rms.recruitment.controllers;
 
 import com.rms.recruitment.dto.*;
+import com.rms.recruitment.dto.request.CandidateCreateRequest;
+import com.rms.recruitment.dto.response.ApiResponse;
 import com.rms.recruitment.services.CandidateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/candidates")
@@ -23,52 +24,38 @@ public class CandidateController {
     }
 
     // Danh sách ứng viên với tìm kiếm và lọc
-    /*
-     * @PostMapping("/search")
-     * 
-     * @Operation(summary = "Tìm kiếm và lọc ứng viên", description =
-     * "Tìm kiếm ứng viên theo các tiêu chí")
-     * 
-     * @PreAuthorize("hasAuthority('MANAGE_CANDIDATES')")
-     * public ResponseEntity<ApiResponse<Page<CandidateDTO>>> searchCandidates(
-     * 
-     * @Valid @RequestBody CandidateSearchRequest searchRequest) {
-     * try {
-     * Page<CandidateDTO> candidates =
-     * candidateService.searchCandidates(searchRequest);
-     * return ResponseEntity.ok(ApiResponse.success(candidates,
-     * "Tìm kiếm ứng viên thành công"));
-     * } catch (Exception e) {
-     * return ResponseEntity.badRequest()
-     * .body(ApiResponse.error("Lỗi khi tìm kiếm ứng viên: " + e.getMessage()));
-     * }
-     * }
-     * 
-     * @GetMapping
-     * 
-     * @Operation(summary = "Lấy danh sách ứng viên", description =
-     * "Lấy danh sách ứng viên với phân trang")
-     * 
-     * @PreAuthorize("hasAuthority('MANAGE_CANDIDATES')")
-     * public ResponseEntity<ApiResponse<Page<CandidateDTO>>> getAllCandidates(
-     * 
-     * @RequestParam(defaultValue = "0") int page,
-     * 
-     * @RequestParam(defaultValue = "20") int size,
-     * 
-     * @RequestParam(defaultValue = "candidateId,desc") String sort) {
-     * try {
-     * Page<CandidateDTO> candidates = candidateService.getAllCandidates(page, size,
-     * sort);
-     * return ResponseEntity.ok(ApiResponse.success(candidates,
-     * "Lấy danh sách ứng viên thành công"));
-     * } catch (Exception e) {
-     * return ResponseEntity.badRequest()
-     * .body(ApiResponse.error("Lỗi khi lấy danh sách ứng viên: " +
-     * e.getMessage()));
-     * }
-     * }
-     */
+    // @PostMapping("/search")
+    // @Operation(summary = "Tìm kiếm và lọc ứng viên", description = "Tìm kiếm ứng
+    // viên theo các tiêu chí")
+    // @PreAuthorize("hasAuthority('MANAGE_CANDIDATES')")
+    // public ResponseEntity<ApiResponse<Page<CandidateDTO>>> searchCandidates(
+    // @Valid @RequestBody CandidateSearchRequest searchRequest) {
+    // try {
+    // Page<CandidateDTO> candidates =
+    // candidateService.searchCandidates(searchRequest);
+    // return ResponseEntity.ok(ApiResponse.success(candidates, "Tìm kiếm ứng viên
+    // thành công"));
+    // } catch (Exception e) {
+    // return ResponseEntity.badRequest()
+    // .body(ApiResponse.error("Lỗi khi tìm kiếm ứng viên: " + e.getMessage()));
+    // }
+    // }
+
+    @GetMapping
+    @Operation(summary = "Lấy danh sách ứng viên", description = "Lấy danh sách ứng viên với phân trang")
+    @PreAuthorize("hasAuthority('MANAGE_CANDIDATES')")
+    public ResponseEntity<ApiResponse<Page<CandidateDTO>>> getAllCandidates(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "candidateId,desc") String sort) {
+        try {
+            Page<CandidateDTO> candidates = candidateService.getAllCandidates(page, size, sort);
+            return ResponseEntity.ok(ApiResponse.success(candidates, "Lấy danh sách ứng viên thành công"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.error("Lỗi khi lấy danh sách ứng viên: " + e.getMessage()));
+        }
+    }
 
     // Tạo ứng viên mới
     @PostMapping

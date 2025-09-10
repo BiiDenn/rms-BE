@@ -1,6 +1,6 @@
 package com.rms.recruitment.controllers;
 
-import com.rms.recruitment.dto.RoleAssignmentRequest;
+import com.rms.recruitment.dto.request.RoleAssignmentRequest;
 import com.rms.recruitment.enums.PermissionType;
 import com.rms.recruitment.enums.RoleType;
 import com.rms.recruitment.models.Roles;

@@ -1,5 +1,6 @@
-package com.rms.recruitment.dto;
+package com.rms.recruitment.dto.request;
 
+import com.rms.recruitment.dto.AddressDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,8 @@
 package com.rms.recruitment.services;
 
 import com.rms.recruitment.dto.*;
+import com.rms.recruitment.dto.request.CandidateCreateRequest;
+import com.rms.recruitment.dto.request.CandidateSearchRequest;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

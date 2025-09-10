@@ -1,6 +1,8 @@
 package com.rms.recruitment.services.Impl;
 
 import com.rms.recruitment.dto.*;
+import com.rms.recruitment.dto.request.CandidateCreateRequest;
+import com.rms.recruitment.dto.request.CandidateSearchRequest;
 import com.rms.recruitment.models.Candidates;
 import com.rms.recruitment.repositories.CandidatesRepository;
 import com.rms.recruitment.services.CandidateService;
