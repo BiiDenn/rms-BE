@@ -18,3 +18,4 @@ public class OnboardingInfoResponse {
     private LocalDate expectedOnboardDate;      // Ngày dự kiến onboard từ offers
     private String jobTitle;                    // Chức danh từ recruitments
 }
+

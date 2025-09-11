@@ -122,7 +122,7 @@ public class RecruitmentProcessServiceImpl implements RecruitmentProcessService 
         // Auto-create 7 default candidate process steps for this candidate and recruitment process
         System.out.println("=== CREATING DEFAULT CANDIDATE PROCESS STEPS ===");
         List<String> defaultSteps = Arrays.asList(
-                "addNew",
+                "AddNew",
                 "Screening",
                 "Call Interview",
                 "Interview1",
