@@ -73,9 +73,7 @@ public class CandidateServiceImpl implements CandidateService {
         candidate.setLastName(createRequest.getLastName());
         candidate.setDateOfBirth(createRequest.getDateOfBirth());
 
-        if (createRequest.getGender() != null) {
-            candidate.setGender(createRequest.getGender().equals("Nam") ? 1 : 0);
-        }
+        candidate.setGender(parseGenderId(createRequest.getGender()));
 
         candidate.setMainEmail(createRequest.getMainEmail());
         candidate.setSubEmail(createRequest.getSubEmail());
@@ -112,9 +110,7 @@ public class CandidateServiceImpl implements CandidateService {
             candidate.setLastName(updateRequest.getLastName());
             candidate.setDateOfBirth(updateRequest.getDateOfBirth());
 
-            if (updateRequest.getGender() != null) {
-                candidate.setGender(updateRequest.getGender().equals("Nam") ? 1 : 0);
-            }
+            candidate.setGender(parseGenderId(updateRequest.getGender()));
 
             candidate.setMainEmail(updateRequest.getMainEmail());
             candidate.setSubEmail(updateRequest.getSubEmail());
@@ -197,9 +193,9 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     private String getRecruitmentSource(Candidates candidate) {
-        // Lấy trực tiếp từ trường recruitmentSource (nguồn ứng tuyển nhập tay)
-        if (candidate.getRecruitmentSource() != null && !candidate.getRecruitmentSource().isEmpty()) {
-            return candidate.getRecruitmentSource();
+        // Lấy từ trường referredBy (nguồn giới thiệu)
+        if (candidate.getReferredBy() != null && !candidate.getReferredBy().isEmpty()) {
+            return candidate.getReferredBy();
         }
 
         return "Chưa xác định";
@@ -261,5 +257,17 @@ public class CandidateServiceImpl implements CandidateService {
         }
 
         return "Chưa xác định";
+    }
+
+    private Integer parseGenderId(String genderInput) {
+        if (genderInput == null || genderInput.isBlank()) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(genderInput.trim());
+        } catch (NumberFormatException ex) {
+            // Input like "Nam"/"Nữ" without a masterdata id → leave null to avoid FK error
+            return null;
+        }
     }
 }

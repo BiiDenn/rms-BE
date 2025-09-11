@@ -37,4 +37,13 @@ public class Attachments {
     @Column(name = "UploadDate")
     private LocalDate uploadDate;
 
+    // Relations to MasterData to satisfy mappedBy in MasterData
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FileType", referencedColumnName = "MasterDataID", insertable = false, updatable = false)
+    private MasterData fileTypeMasterData;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FileFormat", referencedColumnName = "MasterDataID", insertable = false, updatable = false)
+    private MasterData fileFormatMasterData;
+
 }
