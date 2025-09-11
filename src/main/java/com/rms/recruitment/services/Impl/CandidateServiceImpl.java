@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -161,17 +160,27 @@ public class CandidateServiceImpl implements CandidateService {
                 .secondaryLanguage("Tiếng Anh")
                 .recruitmentSource(getRecruitmentSource(candidate))
                 .referrer(candidate.getReferredBy())
-                .maritalStatus("Độc thân")
+                .maritalStatus(candidate.getMaritalStatus())
                 .address("Chưa cập nhật")
                 .qualifications(candidate.getNote())
-                .hardSkills(Arrays.asList("Chưa cập nhật"))
-                .softSkills(Arrays.asList("Chưa cập nhật"))
+                .hardSkills(splitComma(candidate.getHardSkill(), "Chưa cập nhật"))
+                .softSkills(splitComma(candidate.getSoftSkill(), "Chưa cập nhật"))
                 .resumes(new ArrayList<>())
                 .lastUpdatedBy("System")
                 .lastUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy")))
                 .recruitmentId(candidate.getJobTitleId())
                 .recruitmentCode(getRecruitmentCode(candidate))
                 .build();
+    }
+
+    private java.util.List<String> splitComma(String value, String fallbackIfEmpty) {
+        if (value == null || value.trim().isEmpty()) {
+            return java.util.Arrays.asList(fallbackIfEmpty);
+        }
+        return java.util.Arrays.stream(value.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
     }
 
     private CandidateListDTO convertToListDTO(Candidates candidate) {

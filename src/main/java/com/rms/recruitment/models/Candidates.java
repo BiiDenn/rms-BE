@@ -176,6 +176,22 @@ return employee;
         this.expectedOnboardDate = expectedOnboardDate;
     }
 
+    public String getHardSkill() {
+        return hardSkill;
+    }
+
+    public void setHardSkill(String hardSkill) {
+        this.hardSkill = hardSkill;
+    }
+
+    public String getSoftSkill() {
+        return softSkill;
+    }
+
+    public void setSoftSkill(String softSkill) {
+        this.softSkill = softSkill;
+    }
+
     @Column(name = "gender")
     private Integer gender;
 
@@ -227,6 +243,14 @@ return employee;
 
     @Column(name = "expectedOnboardDate")
     private LocalDate expectedOnboardDate;
+
+    @Lob
+    @Column(name = "hardSkill")
+    private String hardSkill;
+
+    @Lob
+    @Column(name = "softSkill")
+    private String softSkill;
 
     // One-to-Many relationship with CandidateProcess
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
